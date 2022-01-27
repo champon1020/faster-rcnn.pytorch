@@ -33,7 +33,7 @@ class _ProposalLayer(nn.Module):
         super(_ProposalLayer, self).__init__()
 
         self._feat_stride = feat_stride
-        self._anchors = torch.from_numpy(generate_anchors(scales=np.array(scales), 
+        self._anchors = torch.from_numpy(generate_anchors(scales=np.array(scales),
             ratios=np.array(ratios))).float()
         self._num_anchors = self._anchors.size(0)
 
@@ -117,9 +117,9 @@ class _ProposalLayer(nn.Module):
 
         # scores_keep = scores.view(-1)[keep_idx].view(batch_size, trim_size)
         # proposals_keep = proposals.view(-1, 4)[keep_idx, :].contiguous().view(batch_size, trim_size, 4)
-        
+
         # _, order = torch.sort(scores_keep, 1, True)
-        
+
         scores_keep = scores
         proposals_keep = proposals
         _, order = torch.sort(scores_keep, 1, True)
@@ -155,6 +155,8 @@ class _ProposalLayer(nn.Module):
 
             # padding 0 at the end.
             num_proposal = proposals_single.size(0)
+            if num_proposal == 0:
+                continue
             output[i,:,0] = i
             output[i,:num_proposal,1:] = proposals_single
 
